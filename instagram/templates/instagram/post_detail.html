@@ -1,0 +1,19 @@
+{% extends "instagram/layout.html" %}
+{% block title %}Document {% endblock %}
+
+{% block content %}
+    <h2>{{ post.author }}</h2>
+    
+    {% if post.photo %}
+    <div>
+        <img src="{{ post.photo.url }}" alt="">
+    </div>
+    {% endif %}
+    {{ post.message|linebreaks }}
+    <hr>
+    <a href="{% url 'instagram:post_list'%}" class="btn btnprimary">
+        목록
+    </a>
+    <a href="{% url 'instagram:post_edit' post.pk %}" class="btn btn-info">수정</a>
+    <a href="{% url 'instagram:post_delete' post.pk %}" class="btn btn-danger">삭제</a>
+{% endblock %}
