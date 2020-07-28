@@ -137,6 +137,10 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
+ADMINS = [
+    ('Seokju Hong', 'hsj4665@gmail.com')
+]
+
 # AUTH_USER_MODEL = "auth.User"
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -148,3 +152,14 @@ MESSAGE_TAGS = {
 }
 
 LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+# Email with Send Grid
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+WELCOME_EMAIL_SENDER = 'hsj4665@gmail.com'
