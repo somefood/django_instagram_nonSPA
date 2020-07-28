@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'debug_toolbar',
     'bootstrap4',
+    'django_pydenticon',
     'accounts',
     'blog1',
     'instagram',
