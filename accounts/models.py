@@ -1,8 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
-    zipcode = models.CharField(max_length=6)
+class User(AbstractUser):
+    website_url = models.URLField(blank=True)
+    bio = models.TextField(blank=True)

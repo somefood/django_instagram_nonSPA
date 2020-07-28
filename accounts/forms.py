@@ -1,19 +1,23 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from .models import Profile
+from .models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['address', 'zipcode']
+class SignupForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
 
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
 
-class LoginForm(AuthenticationForm):
-    answer = forms.IntegerField(help_text='3 + 3=?')
-
-    def clean_answer(self):
-        answer = self.cleaned_data.get('answer')
-        if answer != 6:
-            raise forms.ValidationError('땡~!')
-        return answer
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            qs = User.objects.filter(email=email)
+            if qs.exists():
+                raise forms.ValidationError("이미 등록된 주소입니다.")
+        return email

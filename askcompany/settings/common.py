@@ -137,7 +137,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-AUTH_USER_MODEL = 'auth.User'
+# AUTH_USER_MODEL = "auth.User"
+AUTH_USER_MODEL = 'accounts.User'
 
 from django.contrib.messages import constants as messages_constants
 

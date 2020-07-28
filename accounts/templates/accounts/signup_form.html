@@ -1,13 +1,12 @@
-{% extends "instagram/layout.html" %}
+{% extends "accounts/layout.html" %}
 {% load bootstrap4 %}
 
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-        <button class="btn btn-primary">회원가</button>
-    {% endbuttons %}
-</form>
-<hr>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                {% include "_form.html" with submit_label="회원가입" %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
