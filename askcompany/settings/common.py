@@ -151,6 +151,7 @@ MESSAGE_TAGS = {
     messages_constants.ERROR: 'danger',
 }
 
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 # Email with Send Grid

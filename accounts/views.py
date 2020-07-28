@@ -1,6 +1,16 @@
 from django.contrib import messages
+from django.contrib.auth import login as auth_login
+from django.contrib.auth.views import LoginView, LogoutView, logout_then_login
 from django.shortcuts import render, redirect
 from .forms import SignupForm
+
+
+login = LoginView.as_view(template_name="accounts/login_form.html")
+
+
+def logout(request):
+    messages.success(request, '로그아웃 되었습니다.')
+    return logout_then_login(request) # 로그아웃하고 로그인 페이지로
 
 
 def signup(request):
@@ -8,6 +18,7 @@ def signup(request):
         form = SignupForm(request.POST)
         if form.is_valid():
             signed_user = form.save()
+            auth_login(request, signed_user)
             messages.success(request, "회원가입 환영합니다.")
             signed_user.send_welcome_email() # FIXME: Celery로 비동기 처리하는 것을 추천
             next_url = request.GET.get('next', '/')
