@@ -12,13 +12,15 @@ class User(AbstractUser):
         MALE = "M", "남성" # 첫번째가 실제 저장되는 값, 두번째는 디스프레이 되는 값
         FEMALE = "F", "여"
 
+    follower_set = models.ManyToManyField("self", blank=True) # 자기 모델에 대해서도 M2M 관계 지정가능
+    following_set = models.ManyToManyField("self", blank=True)
+
     website_url = models.URLField(blank=True)
     bio = models.TextField(blank=True)
     phone_number = models.CharField(max_length=13, validators=[RegexValidator(r"^010-?[1-9]\d{3}-?\d{4}$")], blank=True)
     gender = models.CharField(max_length=1, choices=GenderChoices.choices, blank=True)
     avatar = models.ImageField(blank=True, upload_to="accounts/avatar/%Y/%m/%d",
                                help_text="48px * 48px 크기의 png/jpg 파일을 업로드해주세요.")
-
 
     @property
     def name(self):

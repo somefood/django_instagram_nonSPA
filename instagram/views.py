@@ -8,8 +8,11 @@ from .forms import PostForm
 
 @login_required
 def index(request):
+    suggested_user_list = get_user_model().objects.all()\
+        .exclude(pk=request.user.pk)\
+        .exclude(pk__in=request.user.following_set.all())[:3]
     return render(request, 'instagram/index.html', {
-
+        "suggested_user_list": suggested_user_list,
     })
 
 
