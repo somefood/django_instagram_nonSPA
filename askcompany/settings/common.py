@@ -38,10 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third Apps
     'django_extensions',
     'debug_toolbar',
     'bootstrap4',
     'django_pydenticon',
+    'easy_thumbnails',
+    # Locals Apps
     'accounts',
     'blog1',
     'instagram',
