@@ -4,14 +4,20 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
 from .forms import PostForm
-
+from django.db.models import Q
 
 @login_required
 def index(request):
+    post_list =  Post.objects.all()\
+        .filter(
+        Q(author=request.user) | Q(author__in=request.user.following_set.all())
+    )
+
     suggested_user_list = get_user_model().objects.all()\
         .exclude(pk=request.user.pk)\
         .exclude(pk__in=request.user.following_set.all())[:3]
     return render(request, 'instagram/index.html', {
+        "post_list": post_list,
         "suggested_user_list": suggested_user_list,
     })
 
