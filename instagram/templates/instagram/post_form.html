@@ -2,15 +2,11 @@
 {% load bootstrap4 %}
 
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input type="submit" value="저장" class="btn btn-primary">
-</form>
-<hr>
-{% if post %}
-    <a href="{{ post.instance.get_absolute_url }}" class="btn btn-primary">내용으로</a>
-{% else %}
-    <a href="{% url 'instagram:post_list' %}">목록</a>
-{% endif %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                {% include "_form.html" with form_title="새 포스팅 쓰기" subit_label="새 포스팅 쓰기" %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

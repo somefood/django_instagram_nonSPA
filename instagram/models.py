@@ -1,24 +1,28 @@
+import re
 from django.db import models
-from django.core.validators import MinLengthValidator
 from django.conf import settings
 from django.urls import reverse
 
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    message = models.TextField(
-        validators=[MinLengthValidator(10)]
-    )
     photo = models.ImageField(blank=True, upload_to='instagram/post/%Y/%m/%d')
+    caption = models.CharField(max_length=500)
     tag_set = models.ManyToManyField('Tag', blank=True)
-    is_public = models.BooleanField(default=False, verbose_name='공개 여부')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    location = models.CharField(max_length=100)
 
-    # Java의 toString
     def __str__(self):
-        # return f"Custom Post object ({self.id})"
-        return self.message
+        return self.caption
+
+    def extract_tag_list(self):
+        tag_name_list = re.findall(r"#([a-zA-Z\dㄱ-힣]+)", self.caption)
+        tag_list = []
+        for tag_name in tag_name_list:
+            tag, _ = Tag.objects.get_or_create(name=tag_name)
+            tag_list.append(tag)
+        return tag_list
+
+
 
     def get_absolute_url(self):
         return reverse('instagram:post_detail', args=[self.pk])
@@ -29,13 +33,6 @@ class Post(models.Model):
     # def message_length(self): # 단, 인자가 없어야 함
     #     return len(self.message)
     # message_length.short_description = '메세지 글자수' # admin 페이지에서 칼럼명으로 사용
-
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, limit_choices_to={'is_public': True},) # post_id
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Tag(models.Model):
