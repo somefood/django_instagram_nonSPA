@@ -1,4 +1,5 @@
 {% load thumbnail %}
+{% load instagram_tags %}
 
 <div class="card">
     <div class="card-header">
@@ -6,13 +7,22 @@
         <a href="{% url 'instagram:user_page' post.author.username %}">{{ post.author.name }}</a>
     </div>
     <div class="card-body">
-        <img src="{% thumbnail post.photo 256x256 crop %}" alt=""/>
-    </div>
-    <div class="card-footer">
+        <img src="{% thumbnail post.photo 256x256 crop %}" alt="" style="width:100%;"/>
         {% for tag in post.tag_set.all %}
             <span class="badge badge-primary">
                 #{{ tag }}
             </span>
         {% endfor %}
+    </div>
+    <div class="card-footer">
+        {% if post|is_like_user:user %}
+        <a href="{% url 'instagram:post_unlike' post.pk %}">
+            <i class="fa fa-heart"></i>
+        </a>
+        {% else %}
+        <a href="{% url 'instagram:post_like' post.pk %}">
+            <i class="fa fa-heart-o"></i>
+        </a>
+        {% endif %}
     </div>
 </div>

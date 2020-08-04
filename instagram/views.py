@@ -8,6 +8,7 @@ from .models import Post
 from .forms import PostForm
 from django.db.models import Q
 
+
 @login_required
 def index(request):
     timesince = timezone.now() - timedelta(days=3)
@@ -16,7 +17,7 @@ def index(request):
         Q(author=request.user) | Q(author__in=request.user.following_set.all())
     )\
     .filter(
-        created_at__lte=timesince
+        created_at__gte=timesince
     )
 
     suggested_user_list = get_user_model().objects.all()\
@@ -51,6 +52,22 @@ def post_detail(request, pk):
     return render(request, "instagram/post_detail.html", {
         "post": post,
     })
+
+
+def post_like(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.add(request.user)
+    messages.success(request, f"포스팅{post.pk}를 좋아합니다.")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
+
+
+def post_unlike(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.like_user_set.remove(request.user)
+    messages.success(request, f"포스팅{post.pk}를 좋아요 취소합니다.")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
 
 
 def user_page(request, username):
