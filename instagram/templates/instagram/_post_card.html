@@ -1,5 +1,6 @@
 {% load thumbnail %}
 {% load instagram_tags %}
+{% load humanize %}
 
 <div class="card">
     <div class="card-header">
@@ -8,21 +9,42 @@
     </div>
     <div class="card-body">
         <img src="{% thumbnail post.photo 256x256 crop %}" alt="" style="width:100%;"/>
-        {% for tag in post.tag_set.all %}
-            <span class="badge badge-primary">
-                #{{ tag }}
-            </span>
-        {% endfor %}
+        <div>
+            {% if post|is_like_user:user %}
+                <a href="{% url 'instagram:post_unlike' post.pk %}">
+                    <i class="fa fa-heart"></i>
+                </a>
+                {% else %}
+                <a href="{% url 'instagram:post_like' post.pk %}">
+                    <i class="fa fa-heart-o"></i>
+                </a>
+            {% endif %}
+        </div>
+        <div class="comment-list">
+            {% for comment in post.comment_set.all %}
+                <div class="comment">
+                    <strong>{{ comment.author }}</strong>
+                    {{ comment.message }}
+                    <small class="text-muted">{{ comment.created_at|naturaltime }}</small>
+                </div>
+            {% empty %}
+                댓글이 없습니다.
+            {% endfor %}
+        </div>
+        <div>
+            {% for tag in post.tag_set.all %}
+                <span class="badge badge-primary">
+                    #{{ tag }}
+                </span>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="{{ post.get_absolute_url }}" class="text-muted">
+            <small>{{ post.created_at|naturaltime }}</small>
+            </a>
+        </div>
     </div>
     <div class="card-footer">
-        {% if post|is_like_user:user %}
-        <a href="{% url 'instagram:post_unlike' post.pk %}">
-            <i class="fa fa-heart"></i>
-        </a>
-        {% else %}
-        <a href="{% url 'instagram:post_like' post.pk %}">
-            <i class="fa fa-heart-o"></i>
-        </a>
-        {% endif %}
+        <a href="{% url 'instagram:comment_new' post.pk %}">댓글 쓰기</a>
     </div>
 </div>

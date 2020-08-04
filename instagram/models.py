@@ -46,6 +46,15 @@ class Post(BaseModel):
     # message_length.short_description = '메세지 글자수' # admin 페이지에서 칼럼명으로 사용
 
 
+class Comment(BaseModel):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    class Meta:
+        ordering = ['-id']
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
     # post_set = models.ManyToManyField(Post, blank=True)
